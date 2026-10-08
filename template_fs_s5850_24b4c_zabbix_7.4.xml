@@ -1,0 +1,609 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<zabbix_export>
+    <version>7.4</version>
+    <template_groups>
+        <template_group>
+            <uuid>7df96b18c230490a982d6e09f58547f3</uuid>
+            <name>Templates/Network devices</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>4f39bc276a1d4b68a529e46a7102b4d9</uuid>
+            <template>FS S5850-24B4C</template>
+            <name>FS S5850-24B4C by SNMP and SSH</name>
+            <description>Community template for FS S5850-24B4C (tested: FSOS 7.5.5, Zabbix 7.4). FS proprietary SNMP OIDs provide CPU (three windows), used memory and firmware version. SSH show environment provides fan/PSU health, PSU power consumption and two temperatures. Set host macros {$FS.SSH.IP}, {$FS.SSH.USER}, {$FS.SSH.PASSWORD}. Use alongside Network Generic Device by SNMP for interface monitoring. Not an official FS template; other models and firmware versions have not been verified.</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>52f555e51bf7415890c4a5700664faaf</uuid>
+                    <name>FS: Failed fans</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.fans.failed</key>
+                    <description>Number of missing or non-OK fan entries among eight expected indexes (1-1 through 2-4).</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.summary.fan_errors</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>fan</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>f090aa88748a4ab6b409fa0c6efe45be</uuid>
+                            <expression>nodata(/FS S5850-24B4C/fs.env.fans.failed,20m)=1</expression>
+                            <name>FS: Environment monitoring has no data</name>
+                            <priority>WARNING</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>monitoring</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                        <trigger>
+                            <uuid>fa68dc6cf26d43b09f1403d44a83ebed</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.fans.failed)&gt;0</expression>
+                            <name>FS: Fan failure detected</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>fan</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>f2a45c0268b84eb5af8139e7cde80865</uuid>
+                    <name>FS: Minimum fan speed</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.fans.min_speed</key>
+                    <units>%</units>
+                    <description>Lowest reported fan speed in percent (not RPM).</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.summary.fan_min_speed</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>fan</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4f617e40fd25471791943dcd82a7570c</uuid>
+                    <name>FS: Failed power supplies</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.psu.failed</key>
+                    <description>Number of missing or unhealthy power supply entries among expected PSU indexes 1 and 2.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.summary.psu_errors</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>power</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>865f4edd972645939b174fb1fa4fe6cf</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.psu.failed)&gt;0</expression>
+                            <name>FS: Power supply failure</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>power</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>3f0650a7abea4234b33117b9bac93c66</uuid>
+                    <name>FS: PSU 1 consumption</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.psu.watts[1]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>W</units>
+                    <description>Current reported power consumption of power supply 1; not its rated capacity.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.power['1'].watts</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>power</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>fc2ddb8817844f58936698cadcea550d</uuid>
+                    <name>FS: PSU 2 consumption</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.psu.watts[2]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>W</units>
+                    <description>Current reported power consumption of power supply 2; not its rated capacity.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.power['2'].watts</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>power</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>44d5228c51f1487493638c3f5802a5cc</uuid>
+                    <name>FS: Missing temperature sensors</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.sensors.missing</key>
+                    <description>Count of missing expected sensors (indexes 1 and 2). A missing sensor generates a hardware warning.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.summary.sensor_errors</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>temperature</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>1d37d80f1a5e49ed9b4614142b1d2d16</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.sensors.missing)&gt;0</expression>
+                            <name>FS: Temperature sensor data missing</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>temperature</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>1cf63cf84d78477ababaa2890af76267</uuid>
+                    <name>FS: Temperature AROUND_CHIP</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.temp[1]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <description>Temperature reported by AROUND_CHIP sensor, index 1.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.sensors['1'].value</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>temperature</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>71d05281ff8e473685849a3096c359b9</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.temp[1])&gt;={$FS.TEMP.AROUND.CRIT}</expression>
+                            <name>FS: AROUND_CHIP temperature critical</name>
+                            <priority>DISASTER</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>temperature</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                        <trigger>
+                            <uuid>4307c4b2107b467e9996988d48c79174</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.temp[1])&gt;={$FS.TEMP.AROUND.HIGH}
+and last(/FS S5850-24B4C/fs.env.temp[1])&lt;{$FS.TEMP.AROUND.CRIT}</expression>
+                            <name>FS: AROUND_CHIP temperature high</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>temperature</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>9c0b9a9406ee49c09428d654edcd470b</uuid>
+                    <name>FS: Temperature SWITCH_CHIP</name>
+                    <type>DEPENDENT</type>
+                    <key>fs.env.temp[2]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <description>Temperature reported by SWITCH_CHIP sensor, index 2.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.sensors['2'].value</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>temperature</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>2c0a86d13b8d4dc8bb47cf55b30953e4</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.temp[2])&gt;={$FS.TEMP.SWITCH.CRIT}</expression>
+                            <name>FS: SWITCH_CHIP temperature critical</name>
+                            <priority>DISASTER</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>temperature</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                        <trigger>
+                            <uuid>8d456c95d12d4afaa507f8ff1971d664</uuid>
+                            <expression>last(/FS S5850-24B4C/fs.env.temp[2])&gt;={$FS.TEMP.SWITCH.HIGH}
+and last(/FS S5850-24B4C/fs.env.temp[2])&lt;{$FS.TEMP.SWITCH.CRIT}</expression>
+                            <name>FS: SWITCH_CHIP temperature high</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>temperature</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>ff62b9ae80344a74b8b2b670a9b3f0f4</uuid>
+                    <name>FS: CPU utilization (1m)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.52642.1.1.9.2.0</snmp_oid>
+                    <key>fsCPUUtilization1Min</key>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>Percentage string. One-minute window inferred from FSOS CLI CPU history.</description>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <parameters>
+                                <parameter>^([0-9]+(?:\.[0-9]+)?)%$</parameter>
+                                <parameter>\1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>cpu</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>d5e6a7b8c9d041f29a3b4c5d6e7f8a9b</uuid>
+                            <expression>min(/FS S5850-24B4C/fsCPUUtilization1Min,5m)&gt;90</expression>
+                            <name>FS S5850: CPU utilization over 90% for 5 minutes</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>4a11920492444b15be81f307c7b6ee30</uuid>
+                    <name>FS: CPU utilization (5m)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.52642.1.1.9.3.0</snmp_oid>
+                    <key>fsCPUUtilization5Min</key>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>Percentage string. Five-minute window inferred from FSOS CLI CPU history.</description>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <parameters>
+                                <parameter>^([0-9]+(?:\.[0-9]+)?)%$</parameter>
+                                <parameter>\1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>cpu</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>8e5c1a2b349d4f6cb12a3456789abcde</uuid>
+                    <name>FS: CPU utilization (5s)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.52642.1.1.9.1.0</snmp_oid>
+                    <key>fsCPUUtilization5Sec</key>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>Device returns a percentage string (e.g. 1.82%). The suffix is removed by preprocessing. Five-second window is inferred from the FSOS CLI CPU history output.</description>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <parameters>
+                                <parameter>^([0-9]+(?:\.[0-9]+)?)%$</parameter>
+                                <parameter>\1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>cpu</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>9a8b7c6d5e4f41a2b3c4d5e6f7a8b9c0</uuid>
+                    <name>FS: Memory utilization (used)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.52642.1.1.1.13.1.5.0</snmp_oid>
+                    <key>fsMemoryPoolCurrentUtilization</key>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>OID returns FREE memory percentage as a string with percent sign. For this FSOS 7.5.5 walk, 743364 free / 1930120 total = 38.51%; Zabbix stores USED memory percentage = 100 - free.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>var free = parseFloat(value); if (!isFinite(free) || free &lt; 0 || free &gt; 100) { throw "Invalid free-memory percentage: " + value; } return 100 - free;</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>b1c2d3e4f5a647b8a9e0f1a2b3c4d5e6</uuid>
+                            <expression>min(/FS S5850-24B4C/fsMemoryPoolCurrentUtilization,5m)&gt;90</expression>
+                            <name>FS S5850: Memory utilization over 90% for 5 minutes</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>f1a2b3c4d5e647f8a9b0c1d2e3f4a5b6</uuid>
+                    <name>FS: Firmware version</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.52642.1.1.3.5.0</snmp_oid>
+                    <key>fsSystemSwVersion</key>
+                    <delay>1h</delay>
+                    <value_type>TEXT</value_type>
+                    <description>FSOS firmware string as exposed by S5850-24B4C (for example FSOS Software, S5850, Version 7.5.5).</description>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>bb31bd617019406e9914b21d99cb8b67</uuid>
+                    <name>FS: Environment raw data</name>
+                    <type>SSH</type>
+                    <key>ssh.run[fs_environment,{$FS.SSH.IP},22]</key>
+                    <delay>5m</delay>
+                    <history>7d</history>
+                    <value_type>TEXT</value_type>
+                    <params>show environment</params>
+                    <username>{$FS.SSH.USER}</username>
+                    <password>{$FS.SSH.PASSWORD}</password>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>// Tested on S5850-24B4C FSOS 7.5.5. Fail closed on missing sections.
+// One SSH poll feeds all dependent Zabbix items.
+var data = {fans: {}, power: {}, sensors: {}, summary: {}};
+var seen = {fans: false, power: false, sensors: false};
+var section = '';
+var lines = value.replace(/\r/g, '').split('\n');
+
+for (var i = 0; i &lt; lines.length; i++) {
+    var line = lines[i];
+    var m;
+    if (/^\s*Fan Module:/i.test(line)) {
+        section = 'fans'; seen.fans = true; continue;
+    }
+    if (/^\s*Power status:/i.test(line)) {
+        section = 'power'; seen.power = true; continue;
+    }
+    if (/^\s*Sensor status/i.test(line)) {
+        section = 'sensors'; seen.sensors = true; continue;
+    }
+    if (section === 'fans') {
+        m = line.match(/^\s*(\d+)\s+(\d+-\d+)\s+(\S+)\s+(\d+(?:\.\d+)?%|-)\s+(\S+)/);
+        if (m) {
+            data.fans[m[2]] = {
+                module: Number(m[1]), status: m[3],
+                speed: m[4] === '-' ? null : parseFloat(m[4]), mode: m[5]
+            };
+        }
+    } else if (section === 'power') {
+        // A missing/faulty PSU may have '-' instead of numeric wattage.
+        var parts = line.replace(/^\s+|\s+$/g, '').split(/\s+/);
+        if (parts.length &gt;= 3 &amp;&amp; /^\d+$/.test(parts[0])) {
+            var watts = parts.length &gt; 5 ? Number(parts[5]) : NaN;
+            var rated = parts.length &gt; 6 ? Number(parts[6]) : NaN;
+            // Never return fake zeros when a watt reading is unavailable.
+            data.power[parts[0]] = {
+                present: parts[1], status: parts[2],
+                type: parts[3] || '', alert: parts[4] || '',
+                watts: (parts.length &gt; 5 &amp;&amp; /^\d+(?:\.\d+)?$/.test(parts[5])) ? watts : null,
+                rated: (parts.length &gt; 6 &amp;&amp; /^\d+(?:\.\d+)?$/.test(parts[6])) ? rated : null
+            };
+        }
+    } else if (section === 'sensors') {
+        m = line.match(/^\s*(\d+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(\S+)/);
+        if (m) {
+            data.sensors[m[1]] = {
+                value: Number(m[2]), lower: Number(m[3]),
+                upper: Number(m[4]), critical: Number(m[5]), position: m[6]
+            };
+        }
+    }
+}
+if (!seen.fans || !seen.power || !seen.sensors) {
+    throw new Error('Missing section in show environment output');
+}
+
+// Fixed indexes are intentionally specific to S5850-24B4C.
+var expectedFans = ['1-1','1-2','1-3','1-4','2-1','2-2','2-3','2-4'];
+var fanErrors = 0;
+var minSpeed = null;
+for (var f = 0; f &lt; expectedFans.length; f++) {
+    var fan = data.fans[expectedFans[f]];
+    if (!fan || fan.status.toUpperCase() !== 'OK') fanErrors++;
+    if (fan &amp;&amp; fan.speed !== null &amp;&amp;
+        (minSpeed === null || fan.speed &lt; minSpeed)) minSpeed = fan.speed;
+}
+var psuErrors = 0;
+for (var p = 1; p &lt;= 2; p++) {
+    var psu = data.power[String(p)];
+    if (!psu || psu.present.toUpperCase() !== 'PRESENT' ||
+        psu.status.toUpperCase() !== 'OK' ||
+        psu.alert.toUpperCase() !== 'NO') psuErrors++;
+}
+var sensorErrors = 0;
+for (var s = 1; s &lt;= 2; s++) {
+    if (!data.sensors[String(s)]) sensorErrors++;
+}
+data.summary = {
+    fan_errors: fanErrors, psu_errors: psuErrors,
+    sensor_errors: sensorErrors, fan_min_speed: minSpeed
+};
+return JSON.stringify(data);</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>environment</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$FS.TEMP.AROUND.HIGH}</macro>
+                    <value>65</value>
+                    <description>High threshold for AROUND_CHIP in degrees C, as reported by tested device.</description>
+                </macro>
+                <macro>
+                    <macro>{$FS.TEMP.AROUND.CRIT}</macro>
+                    <value>80</value>
+                    <description>Critical threshold for AROUND_CHIP in degrees C, as reported by tested device.</description>
+                </macro>
+                <macro>
+                    <macro>{$FS.TEMP.SWITCH.HIGH}</macro>
+                    <value>100</value>
+                    <description>High threshold for SWITCH_CHIP in degrees C, as reported by tested device.</description>
+                </macro>
+                <macro>
+                    <macro>{$FS.TEMP.SWITCH.CRIT}</macro>
+                    <value>110</value>
+                    <description>Critical threshold for SWITCH_CHIP in degrees C, as reported by tested device.</description>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>732992094ddd485eb368e810b2e5ea16</uuid>
+            <expression>nodata(/FS S5850-24B4C/fsCPUUtilization5Sec,15m)=1
+or
+nodata(/FS S5850-24B4C/fsMemoryPoolCurrentUtilization,15m)=1</expression>
+            <name>FS: SNMP monitoring has no data</name>
+            <priority>WARNING</priority>
+            <tags>
+                <tag>
+                    <tag>component</tag>
+                    <value>monitoring</value>
+                </tag>
+            </tags>
+        </trigger>
+    </triggers>
+</zabbix_export>

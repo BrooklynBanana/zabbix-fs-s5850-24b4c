@@ -1,0 +1,21 @@
+Fan Module:
+------------------------------------------
+FanId   Index   Status  Speed       Mode
+1       1-1     OK       40%        Auto
+1       1-2     OK       40%        Auto
+2       1-3     OK       40%        Auto
+2       1-4     OK       40%        Auto
+3       2-1     OK       40%        Auto
+3       2-2     OK       40%        Auto
+4       2-3     OK       40%        Auto
+4       2-4     OK       40%        Auto
+Power status:
+Index     Status    Power     Type      Alert     Power(W)  RatedPower(W)
+1         PRESENT   OK        AC        NO        39.25     550.00
+2         PRESENT   OK        AC        NO        37.75     550.00
+---------------------------------------------------------
+Sensor status (Degree Centigrade):
+Index Temperature Lower_alarm Upper_alarm Critical_limit Position
+1     35          5           65          80             AROUND_CHIP
+2     39          -10         100         110            SWITCH_CHIP
+
