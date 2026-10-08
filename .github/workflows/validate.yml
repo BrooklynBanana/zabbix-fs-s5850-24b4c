@@ -1,0 +1,17 @@
+# Zabbix XML and SSH preprocessing regression tests
+name: Validate template
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check XML and template structure
+        run: python3 tests/validate.py
+      - name: Run SSH parser regression tests
+        run: node tests/test_parser.js
