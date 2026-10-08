@@ -1,0 +1,12 @@
+# Avoid accidental publication of sensitive device diagnostics
+*snmpwalk*.txt
+*-snmp.txt
+*-hardware.txt
+*.pcap
+*.pcapng
+.env
+*.log
+*.swp
+*.tmp
+__pycache__/
+.DS_Store
