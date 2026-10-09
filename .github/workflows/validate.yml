@@ -1,8 +1,14 @@
-# Zabbix XML and SSH preprocessing regression tests
-name: Validate template
+# Zabbix XML and SSH preprocessing regression tests for the FS S5850-24B4C
+name: Validate FS S5850-24B4C template
 on:
   push:
+    paths:
+      - 'FS S5850-24B4C/**'
+      - '.github/workflows/validate.yml'
   pull_request:
+    paths:
+      - 'FS S5850-24B4C/**'
+      - '.github/workflows/validate.yml'
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -12,6 +18,6 @@ jobs:
         with:
           node-version: '22'
       - name: Check XML and template structure
-        run: python3 tests/validate.py
+        run: python3 'FS S5850-24B4C/tests/validate.py'
       - name: Run SSH parser regression tests
-        run: node tests/test_parser.js
+        run: node 'FS S5850-24B4C/tests/test_parser.js'
