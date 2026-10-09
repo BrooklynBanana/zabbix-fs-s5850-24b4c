@@ -17,3 +17,7 @@ Community-maintained Zabbix templates for network and IT infrastructure. Each de
 - These are independent community projects. AI assistance and testing limitations are disclosed in each template's README.
 
 For bugs or suggestions, [open an issue](https://github.com/BrooklynBanana/zabbix-templates/issues) including the model, firmware, Zabbix version and sanitized diagnostics.
+
+## License and copyright
+
+The company's contributions are licensed under the [MIT License](LICENSE), Copyright (c) 2026 **cross media IT GmbH**. Each template also has its own license information. The [FS S5850-24B4C](FS%20S5850-24B4C/LICENSE) template includes a matching MIT notice, and the [Sophos XGS](Sophos%20XGS/README.md#attribution-licensing-and-ai-assistance) template incorporates third-party MIT-licensed material whose original copyright notices remain in its folder. Those upstream notices are **not** replaced by the company license.

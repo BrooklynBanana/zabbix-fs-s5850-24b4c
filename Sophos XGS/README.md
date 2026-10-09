@@ -160,3 +160,7 @@ This is a **community adaptation**, incorporating material derived from:
 Original rights and copyright notices remain with their respective authors. The distributed template is not official Sophos or Zabbix software. The supplied package did **not** include a Sophos MIB.
 
 **AI disclosure:** This template and its original German documentation were developed with assistance from an office ChatGPT account, including template design, SNMP analysis, preprocessing and test planning. The GitHub English documentation and packaging were also AI-assisted. The contributor independently deployed and exercised the template on the XGS 138, 2100 and 3300 noted above. Human review and device-specific validation remain necessary, especially before acting on infrastructure alerts.
+
+### Company copyright and license
+
+Original contributions by **cross media IT GmbH** are licensed under the [MIT License](LICENSE), Copyright (c) 2026 cross media IT GmbH. This does **not** replace the separate copyright and MIT notices of Pinet / Ali Erdem Sunar and the Zabbix community above; those notices must be preserved when distributing this adaptation.
