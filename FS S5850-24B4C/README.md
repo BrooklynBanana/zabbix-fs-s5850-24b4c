@@ -90,4 +90,4 @@ The improved parser in this repository has been validated with synthetic tests b
 
 ## License
 
-[MIT](LICENSE). Contributions and reports from other FSOS versions are welcome; include the exact switch model and firmware, but redact network addresses, serial numbers and credentials.
+Licensed under [MIT](LICENSE). Copyright (c) 2026 **cross media IT GmbH**. Contributions and reports from other FSOS versions are welcome; include the exact switch model and firmware, but redact network addresses, serial numbers and credentials.
