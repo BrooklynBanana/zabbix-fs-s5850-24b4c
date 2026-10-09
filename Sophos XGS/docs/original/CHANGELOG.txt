@@ -1,0 +1,81 @@
+1.0.4 — 09.10.2026
+
+- SNMP-Systemkontakt, Standort und sysName mit automatischen Inventarzuordnungen
+  ergänzt. sysName besitzt einen informativen Änderungs-Trigger.
+- Internes SNMP-Verfügbarkeits-Item ergänzt: 0 nicht verfügbar, 1 verfügbar,
+  2 unbekannt. Kein zusätzlicher Ausfallalarm; bisheriges nodata bleibt zuständig.
+- ifType je entdecktem Interface ergänzt, stündlich, mit häufigen Typ-Mappings.
+- Allgemeiner snmptrap.fallback ergänzt, standardmäßig deaktiviert, ohne Alarm.
+- README: Update, Inventar, Statussemantik, Trap-Aktivierung und optionale
+  separate ICMP-Verknüpfung dokumentiert.
+- 92 feste Items, 27 Prototypen, 6 Discoveries, 45 Makros.
+- Bestehende UUIDs/Item-IDs erhalten; Upgrade und wiederholter Import,
+  Export-Roundtrip und deaktivierter SNMPv3-AuthPriv-Testhost geprüft.
+
+1.0.3 — 09.10.2026
+
+- Aktives CPU-Gesamtitem sophos.cpu.util ergänzt; gleiche numerische OID und
+  JSONPath-Mittelwertbildung wie im HOST-RESOURCES-MIB CPU SNMP-Modul.
+- Durchschnitt aller zurückgegebenen hrProcessorLoad-Werte; FLOAT, Prozent,
+  Polling 1m, Plausibilitätsprüfung 0–100. Keine Nullwerte bei leeren Antworten.
+- Gesamt-CPU-Graph, anhaltender Lastalarm mit mindestens fünf hohen Samples
+  im 5m-Fenster und separater No-data-Alarm hinzugefügt.
+- CPU.MONITOR und CPU.UTIL.HYST ergänzt; CPU.UTIL.WARN bleibt erhalten.
+  Optionale Einzelkern-Alarme verwenden nun ebenfalls Schalter und Hysterese.
+- Einzelkern-Discovery bleibt optional/deaktiviert; zusätzliche Basis-Templates
+  sind nicht nötig. Vorhandene UUIDs und übrige Alarmbedingungen bleiben erhalten.
+- Native CPU-Mittelwert-/Fehlerverarbeitung und Alarmverhalten in Zabbix 7.4.15
+  geprüft. OID-Antwort der aktuellen XGS bleibt vom Benutzer zu bestätigen.
+
+1.0.2 — 09.10.2026
+
+- „license unavailable“ durch klare Produktnamen und statusbezogene Ereignisnamen
+  ersetzt, z.B. „Sophos: Webserver Protection license status: expired“.
+- Alle neun Lizenzbereiche verwenden den gemappten Status bei Problem-Entstehung:
+  expired, deactivated, none oder not subscribed. Aktueller Status zusätzlich als
+  operative Daten; keine Verwechslung mit einem fehlenden SNMP-Wert.
+- UUIDs, Keys, OIDs, Makros, Prioritäten und Trigger-Bedingungen unverändert;
+  Trigger-Abhängigkeiten referenzieren die neuen Namen.
+- Import/Update und tatsächliche expired-/deactivated-Ereignisnamen in Zabbix
+  7.4.15 geprüft. Bestehende Problemereignisse werden nicht rückwirkend umbenannt.
+
+1.0.1 — 09.10.2026
+
+- Nutzerfeedback: sophos.license.base.expiry liefert „Dec 31 2999“.
+- Ursache: Der Parser erlaubte nur Jahre bis 2199 und meldete deshalb trotz
+  passendem Format „base license expiry format unrecognized“.
+- Korrektur: Gültige vierstellige Jahre 2000–9999 akzeptieren; Kalenderprüfung
+  beibehalten. Das Datum bleibt ein Timestamp, statt Lizenzstatus zu übergehen.
+- UUIDs, Keys, Host-Makros, Trigger und OIDs unverändert.
+- 15 native Datumsparser-Testfälle einschließlich Jahr 2999; Import/Update geprüft.
+- Reproduktion der drei gemeldeten Lizenzalarme: Nur der Format-INFO-Alarm
+  schließt nach Parser-Update; abgelaufene Email-/Webserver-Lizenzen bleiben offen.
+- README ergänzt um Update-/Neuberechnungsanleitung und Hardware-EOL-Hinweis.
+
+1.0.0 — 09.10.2026
+
+- Eigenständiges Zabbix-7.4-Template; numerische OIDs, eigene stabile UUIDv4-IDs,
+  kein MIB-Paket oder verknüpftes Basis-Template für den Import erforderlich.
+- Pinet-Basis: Inventar, Ressourcen, 21 Dienste, ausführliche HA-Werte, neun
+  Lizenzbereiche, Interfaces und optionale WLAN-/VPN-Policy-Details übernommen.
+- Community-IPsec-Ansatz: Aktivierung, Verbindungszustand und separater
+  Partially-active-Alarm zusammengeführt; Pinet-Tunnelzähler behalten.
+- VPN-/Interface-Alarme prüfen anhaltende Fehler statt einen einzelnen Wechsel;
+  administrative Aktivierung, aktuelle Admin-Status-Abfrage, Mindest-Samples,
+  Freshness, explizite Recovery und kontextbezogene Erwartungen ergänzt.
+- HA: Faulty=4, Standalone=2; Peer-Fault ebenfalls überwacht. Erwartetes HA-Paar
+  ist explizit konfigurierbar; normale Primary/Auxiliary/Ready-Rollen kein Fehler.
+- Interface-Discovery behält administrativ deaktivierte Ports; Keys basieren auf
+  SNMP-Index. Counter64-Traffic, Float-Raten für Fehler/Discards, eindeutige
+  Sekunden-Einheiten, Makros, Hysterese und Null-Speed-Prüfung korrigiert.
+- Ressourcen benutzen tatsächlich ihre Warn-/Kritisch-Makros. Optionalen Diensten
+  eigene Schalter gegeben; untouched/unregistered lösen keinen Betriebsalarm aus.
+- Lizenzstatus vervollständigt, tatsächliche 30-/7-Tage-Vorwarnung hinzugefügt,
+  Rohdaten erhalten; expliziter Datumsparser samt Formatdiagnose. Bestehende
+  Lizenzprobleme schließen bei veralteten Messwerten nicht fälschlich.
+- SNMP-No-data-Alarm und Abhängigkeiten gegen Folgealarme; Engine-ID-Diagnose.
+- SNMPv3 bleibt Host-Konfiguration; irreführende Community-/Port-Makros entfernt.
+- WLAN, Policies, Standards-CPU und Trap-Log optional/deaktiviert; falsche
+  Trap-OID-/Severity-Annahmen nicht übernommen. Discovery-Lebensdauer festgelegt.
+- Import/Update, Roundtrip, SNMPv3-Verknüpfung, Statuslogik und native Datum-
+  Verarbeitung in Zabbix 7.4.15 verifiziert. Reale XGS-Validierung steht aus.

@@ -1,0 +1,17 @@
+{
+  "upstream_pinet_commit": "21db4a3850995dc302662d6519490d4aeb132930",
+  "upstream_community_yaml_git_blob": "9e5fd8be5065536acf168c7c05ae6227ab53a215",
+  "upstream_community_last_file_commit": "7894afb2f9b054a56820aec39baf264562e828e5",
+  "sha256": {
+    "CHANGELOG.txt": "114f20a16d3d7479de6df82c58b0b31e19dc39d0bb3426e4480445934b59649e",
+    "LICENSE-COMMUNITY.txt": "f51f33cf99571270a997713ecc3d8399a48192c80df89875afca21cdc6cdde72",
+    "LICENSE-PINET.txt": "6ac1fe8e1f812b7c7040e35db2d9588db2690c60840767419cd20ed0b5ca4460",
+    "README.md": "3a6780553e3bde43d2b4c0690f91e15c81bf6dc52b76cf5911c07ac460d241a3",
+    "README.txt": "2ec2e2cd829b3d6671cd6d5d566aeb0b89d1b29446b596975faafe816513ea01",
+    "TESTING.txt": "a9a785adbfb9c73980a943b8c611b3971611d8e531e01bfb01c507af1e417151",
+    "VALIDATION.json": "70fe81b9b8555fba469d722b9f7021e91ac8baf40650141e632297420a3aa3ed",
+    "sophos_xgs_snmp_7.4.yaml": "4937633519446d0c2eeaac93d5036097cca6d5158eda4eb7270c22a870e58d96"
+  },
+  "template_version": "1.0.4",
+  "cpu_reference": "https://www.zabbix.com/integrations/snmp"
+}

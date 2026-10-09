@@ -1,0 +1,86 @@
+XGS-Praxistest — kurze Checkliste
+
+[ ] Modell, exakte SFOS-Version und Zabbix-Server-/Proxy-Version notieren;
+    Sophos-MIB direkt von dieser Firewall herunterladen.
+[ ] YAML auf Zabbix 7.4 importieren, neuen Test-Host verknüpfen, SNMPv3 AuthPriv
+    am Host einstellen. Abfragenden Server/Proxy über Device Access zulassen.
+    Vorhandene doppelte Sophos-/Interface-Templates vermeiden.
+[ ] HA.EXPECTED passend setzen. Backup-/On-Demand-VPNs und unbenutzte Ports mit
+    kontextbezogenen MONITOR=0-Makros ausnehmen. Optionale Dienste aktivieren,
+    benötigte Lizenzen mit LICENSE.EXPECTED=1 festlegen.
+[ ] Discovery einmal „Jetzt ausführen“. Danach ca. 15 Minuten sammeln lassen.
+    Latest Data: Inventar, Uptime, RAM/Disk/Swap, Dienste, HA, Lizenzen prüfen.
+    Items/Discoveries auf unsupported und genaue Fehlermeldung prüfen.
+[ ] Interface-Namen, Admin-/Oper-Status, Traffic, Speed und Counter64-OIDs mit
+    GUI bzw. bekannten Portwerten vergleichen. Unbenutzte/Admin-down-Ports dürfen
+    keinen Link-Alarm auslösen. Fehler/Discards sind Raten pro Sekunde.
+[ ] In einem vereinbarten Testfenster EINEN unkritischen, dauerhaft erwarteten
+    VPN ausfallen lassen: Alarm nach >=3 Fehlersamples im 3m-Fenster; über weitere
+    Polls offen; nach Verbindung wieder zu. Administrativ deaktivierter oder
+    MONITOR=0-Tunnel ohne Down-/Partial-Alarm. Partial=2 testen, sofern herstellbar.
+[ ] Einen unkritischen erwarteten Port mit Admin=up physisch ausfallen lassen:
+    Link-Alarm bleibt offen. Oper=up oder bewusstes Admin-down beendet ihn.
+    Kein produktives Uplink-/HA-Kabel für diesen Test verwenden.
+[ ] Standalone: HA=disabled/state=2 ohne Faulty-Alarm. HA-Paar: beide Zustände
+    plausibel; HA.EXPECTED=1. Bei ohnehin geplantem Failover Status/Peer-Werte,
+    SNMPv3-Erreichbarkeit und Wiederaufnahme prüfen; kein Failover nur für diesen
+    Template-Test erforderlich.
+[ ] Lizenz-Rohdatum und Timestamp vergleichen; DATE.ORDER passend setzen.
+    Temporär Vorwarnschwelle über Restlaufzeit setzen: Alarm kommt; Schwelle
+    wieder zurücksetzen. Warn/Kritisch-Reihenfolge und Hysterese beachten.
+    Ressourcen-Schwellen ebenfalls kurz testweise senken und zurücksetzen.
+[ ] Nur wenn praktikabel kurz SNMP-Zugriff unterbrechen: No-data nach 5m;
+    bestehende VPN-/Link-Probleme dürfen ohne gesunde Daten nicht schließen.
+    Lizenzwerte werden stündlich abgefragt; Freshness dort 3h.
+[ ] Optionale AP-/Policy-/Client-/CPU-Discoveries einzeln aktivieren und auf
+    Unterstützung prüfen. Trap-Log erst nach Receiver-Einrichtung aktivieren.
+[ ] Nach 24–48h Polling-Last, Item-Fehler und unnötige Alarme beurteilen.
+
+Feedback bitte mit Modell/SFOS/Zabbix/Proxy-Version, Standalone oder HA,
+Importfehler bzw. unsupported-Key + OID + exakter Fehlermeldung, VPN- und
+Interface-Zuständen sowie anonymisiertem Lizenz-Rohdatum. Erwarteten und
+beobachteten Alarm-/Recovery-Zeitpunkt nennen. Keine Passwörter mitsenden.
+
+Bereits geprüft, ohne Firewall:
+- Echter YAML-Import und Update in Zabbix 7.4.15; Export-Roundtrip stimmt.
+- 86 Items an deaktiviertem SNMPv3-AuthPriv-Testhost korrekt vererbt.
+- Zehn synthetische VPN-/Interface-/HA-Zustandsfälle; wiederholter Fehler hält
+  Probleme offen, gesunde Werte schließen sie (12 Status-Tests insgesamt).
+- 15 native JavaScript-Preprocessing-Fälle: ISO/Monatsnamen/DMY/MDY,
+  falsche Reihenfolge, ungültige Tage, Schaltjahr, Never und N/A.
+- 88 Sophos-Item-OIDs und Vendor-Discovery-OIDs gegen mitgelieferte Upstream-MIB;
+  eindeutige UUIDv4/Keys und definierte Makro-Basisnamen.
+Nicht geprüft: SNMP-Antworten deiner XGS, reale LLD-Zeilen/Indexwechsel, echte
+Counter-Raten, Gerätelast, reale Partial-VPNs, HA-Failover, optionale CPU/WLAN/Traps
+sowie alle übrigen Schwellen-/No-data-Zeitverläufe auf Hardware.
+
+Zusatzprüfung 1.0.1:
+[ ] Nach dem Update das Rohwert-Item sophos.license.base.expiry erneut abfragen.
+    „Dec 31 2999“ muss zu Timestamp 32503679999 werden und den Format-INFO-Alarm
+    beheben. Die berechtigten Email-/Webserver-Statusalarme dürfen nicht verschwinden.
+
+Zusatzprüfung 1.0.2:
+[ ] YAML erneut importieren; vorhandene Host-Makros beibehalten. Neue Ereignisse
+    müssen Produkt und Status nennen, z.B. „Webserver Protection license status:
+    expired“. Bestehende Problemereignisse behalten ihren gespeicherten Text.
+
+Zusatzprüfung 1.0.3:
+[ ] Neue YAML importieren, Erstellung neuer Items/Trigger/Graphen erlauben.
+[ ] CPU: Average utilization / sophos.cpu.util „Jetzt ausführen“. Wert 0–100 %
+    und Graph prüfen. Bei Fehlern genauen Item-Fehler melden.
+[ ] Bei Bedarf CPU cores discovery aktivieren; Einzelkern-Werte und ihren
+    Mittelwert mit dem Gesamtitem vergleichen. Unterschiedliche Abfragezeitpunkte
+    können leichte Abweichungen ergeben.
+[ ] Vorhandenes separates CPU-Template auf doppelte Alarme prüfen. CPU.MONITOR=0
+    deaktiviert Alarme, nicht die Messwertabfrage.
+
+1.0.4 — zusätzliche Inbetriebnahmechecks
+- sysContact, sysLocation und sysName mit der Sophos-Konfiguration vergleichen.
+- Leere Kontakt-/Standortwerte sind erlaubt; Inventarmodus bei Bedarf automatisch.
+- SNMP-Verfügbarkeit nach erfolgreichen Abfragen=1; unknown=2 nicht als Fehler werten.
+- Interface-Discovery ausführen und ifType je Interface auf plausible Werte prüfen.
+- sysName-Änderung erzeugt INFO, gleicher Folgewert schließt; erster/leer neuer Wert
+  erzeugt keine Änderungsmeldung (synthetisch geprüft, real noch zu bestätigen).
+- Trap-Fallback nur mit konfiguriertem Empfang aktivieren; speziellen und nicht
+  passenden Trap auf die jeweilige Log-Zuordnung prüfen (kein realer Trap-Test).
+- Optionales ICMP-Template separat verknüpfen und ICMP-Pfad prüfen.

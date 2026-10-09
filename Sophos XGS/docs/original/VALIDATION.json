@@ -1,0 +1,335 @@
+{
+  "date": "2026-10-09",
+  "template_version": "1.0.4",
+  "import": {
+    "version": "7.4.15",
+    "import": true
+  },
+  "static": {
+    "vendor_item_oids_checked": 88,
+    "discovery_vendor_oids_checked": true,
+    "uuid_unique_v4": 225,
+    "item_keys_unique": 119,
+    "all_macro_bases_defined": true
+  },
+  "status_regressions": [
+    {
+      "case": "vpn-starts-down",
+      "pass": true,
+      "active": [
+        "VPN test-vpn: Connection down"
+      ]
+    },
+    {
+      "case": "vpn-disabled",
+      "pass": true,
+      "active": []
+    },
+    {
+      "case": "vpn-on-demand",
+      "pass": true,
+      "active": []
+    },
+    {
+      "case": "vpn-partial",
+      "pass": true,
+      "active": [
+        "VPN test-vpn: Connection partially active"
+      ]
+    },
+    {
+      "case": "vpn-active",
+      "pass": true,
+      "active": []
+    },
+    {
+      "case": "interface-down",
+      "pass": true,
+      "active": [
+        "Interface Port1: Link unavailable"
+      ]
+    },
+    {
+      "case": "interface-admin-disabled",
+      "pass": true,
+      "active": []
+    },
+    {
+      "case": "ha-standalone",
+      "pass": true,
+      "active": []
+    },
+    {
+      "case": "ha-local-faulty",
+      "pass": true,
+      "active": [
+        "Sophos: HA current node faulty"
+      ]
+    },
+    {
+      "case": "ha-peer-faulty",
+      "pass": true,
+      "active": [
+        "Sophos: HA peer node faulty"
+      ]
+    },
+    {
+      "case": "repeated-failure-does-not-auto-recover",
+      "pass": true
+    },
+    {
+      "case": "healthy-state-recovers-existing-problems",
+      "pass": true
+    }
+  ],
+  "native_license_preprocessing": [
+    {
+      "raw": "2027-01-31",
+      "order": "YMD",
+      "timestamp": 1801439999.0,
+      "pass": true
+    },
+    {
+      "raw": "31 Jan 2027",
+      "order": "YMD",
+      "timestamp": 1801439999.0,
+      "pass": true
+    },
+    {
+      "raw": "Jan 31, 2027",
+      "order": "YMD",
+      "timestamp": 1801439999.0,
+      "pass": true
+    },
+    {
+      "raw": "31/01/2027",
+      "order": "YMD",
+      "timestamp": -1.0,
+      "pass": true
+    },
+    {
+      "raw": "31/01/2027",
+      "order": "DMY",
+      "timestamp": 1801439999.0,
+      "pass": true
+    },
+    {
+      "raw": "01/31/2027",
+      "order": "MDY",
+      "timestamp": 1801439999.0,
+      "pass": true
+    },
+    {
+      "raw": "2027-02-30",
+      "order": "YMD",
+      "timestamp": -1.0,
+      "pass": true
+    },
+    {
+      "raw": "Never",
+      "order": "YMD",
+      "timestamp": 0.0,
+      "pass": true
+    },
+    {
+      "raw": "N/A",
+      "order": "YMD",
+      "timestamp": 0.0,
+      "pass": true
+    },
+    {
+      "raw": "2027-02-28",
+      "order": "YMD",
+      "timestamp": 1803859199.0,
+      "pass": true
+    },
+    {
+      "raw": "29 Feb 2028",
+      "order": "YMD",
+      "timestamp": 1835481599.0,
+      "pass": true
+    },
+    {
+      "raw": "Dec 31 2999",
+      "order": "YMD",
+      "timestamp": 32503679999.0,
+      "pass": true
+    },
+    {
+      "raw": "Dec 31, 2999",
+      "order": "YMD",
+      "timestamp": 32503679999.0,
+      "pass": true
+    },
+    {
+      "raw": "2999-12-31",
+      "order": "YMD",
+      "timestamp": 32503679999.0,
+      "pass": true
+    },
+    {
+      "raw": "Feb 29 2999",
+      "order": "YMD",
+      "timestamp": -1.0,
+      "pass": true
+    }
+  ],
+  "roundtrip_and_host_link": {
+    "roundtrip_export_counts_match": true,
+    "snmpv3_authpriv_host_link": true,
+    "inherited_scalar_items": 92,
+    "polling_host_disabled": true,
+    "snmp_wire_test": false
+  },
+  "limitations": [
+    "No real Sophos firewall access",
+    "No SNMP wire test",
+    "Synthetic tests copy trigger expressions onto trapper items; they do not validate physical device OIDs or real LLD rows."
+  ],
+  "license_year_2999_regression": {
+    "exact_reported_raw_value": "Dec 31 2999",
+    "old_parser_reproduces_format_alarm": true,
+    "new_parser_recovers_format_alarm": true,
+    "expired_email_and_webserver_alarms_remain": true,
+    "timestamp": 32503679999,
+    "before": [
+      "Sophos: base license expiry format unrecognized",
+      "Sophos: email license unavailable",
+      "Sophos: webserver license unavailable"
+    ],
+    "after": [
+      "Sophos: email license unavailable",
+      "Sophos: webserver license unavailable"
+    ]
+  },
+  "status_regressions_template_version": "1.0.0; unchanged expressions in 1.0.1",
+  "roundtrip_and_host_link_template_version": "1.0.4",
+  "license_wording_display_check": {
+    "version": "1.0.2",
+    "import_update": "passed",
+    "all_trigger_UUIDs_preserved": true,
+    "all_trigger_conditions_and_priorities_unchanged": true,
+    "expired_event_names": [
+      "Sophos: Email Protection license status: expired (4)",
+      "Sophos: Webserver Protection license status: expired (4)"
+    ],
+    "deactivated_event_names": [
+      "Sophos: Email Protection license status: deactivated (5)",
+      "Sophos: Webserver Protection license status: deactivated (5)"
+    ]
+  },
+  "parser_change_scope_1_0_1_verified": "Only nine parser year limits and template version metadata changed; all IDs, keys, OIDs, macros and triggers are unchanged.",
+  "change_scope_verified": "Five scalar items, one interface prototype, one informational sysName trigger and two value maps added. Existing item definitions, discovery rules (except added prototype), macros, UUIDs, graphs and existing trigger expressions unchanged.",
+  "license_year_2999_regression_template_version": "1.0.1; parser and trigger conditions unchanged in 1.0.2",
+  "native_license_preprocessing_template_version": "1.0.1; parser unchanged in 1.0.2",
+  "cpu": {
+    "template_version": "1.0.3",
+    "native_preprocessing_cases": [
+      {
+        "case": "one-core",
+        "expected": 65,
+        "actual": 65.0,
+        "unsupported": false,
+        "pass": true
+      },
+      {
+        "case": "four-cores",
+        "expected": 50,
+        "actual": 50.0,
+        "unsupported": false,
+        "pass": true
+      },
+      {
+        "case": "unwrapped-array",
+        "expected": 20,
+        "actual": 20.0,
+        "unsupported": false,
+        "pass": true
+      },
+      {
+        "case": "float-and-string",
+        "expected": 2,
+        "actual": 2.0,
+        "unsupported": false,
+        "pass": true
+      },
+      {
+        "case": "empty-table",
+        "expected": null,
+        "actual": null,
+        "unsupported": true,
+        "pass": true
+      },
+      {
+        "case": "outside-percentage-range",
+        "expected": null,
+        "actual": null,
+        "unsupported": true,
+        "pass": true
+      }
+    ],
+    "insufficient_startup_samples_do_not_alert": true,
+    "five_high_samples_alert": true,
+    "hysteresis_holds_at_87_percent": true,
+    "recovers_at_80_percent": true,
+    "real_firewall_oid_response_tested": false,
+    "upgrade_from_1_0_2": true,
+    "cpu_graph_imported": true,
+    "existing_uuids_preserved": true
+  },
+  "license_wording_display_check_template_version": "1.0.2; unchanged wording in 1.0.3",
+  "upgrade_1_0_4": {
+    "zabbix_version": "7.4.15",
+    "template_version": "1.0.4",
+    "import_from_1_0_3": true,
+    "repeated_update": true,
+    "existing_item_ids_preserved": true,
+    "existing_uuids_preserved": true,
+    "scalar_items": 92,
+    "item_prototypes": 27,
+    "new_scalar_items": [
+      "snmptrap.fallback",
+      "system.contact",
+      "system.location",
+      "system.name",
+      "zabbix[host,snmp,available]"
+    ],
+    "existing_item_definitions_and_triggers_unchanged": true
+  },
+  "name_and_metadata_1_0_4": {
+    "template_version": "1.0.4",
+    "first_sample_no_problem": true,
+    "unchanged_no_problem": true,
+    "rename_creates_info": true,
+    "empty_new_name_no_problem": true,
+    "unchanged_followup_recovers": true,
+    "inventory_links_preserved": true,
+    "fallback_disabled_after_import": true,
+    "availability_internal_and_mapping_correct": true,
+    "real_snmp_or_trap_test": false
+  },
+  "user_field_feedback": {
+    "reported_date": "2026-10-09",
+    "template_version": "1.0.4",
+    "source": "User report in this conversation",
+    "devices": [
+      {
+        "model": "XGS 2100",
+        "sfos": "22.0.0 Build 411"
+      },
+      {
+        "model": "XGS 3300",
+        "sfos": "22.0.0 Build 411"
+      },
+      {
+        "model": "XGS 138",
+        "sfos": "22.0.1 MR-1 Build 490"
+      }
+    ],
+    "assessment": "Running on all three devices; positive overall impression",
+    "complete_item_support_audit_reported": false,
+    "targeted_alarm_recovery_tests_reported": false,
+    "ha_failover_tests_reported": false,
+    "zabbix_proxy_versions_reported": false
+  }
+}
